@@ -23,14 +23,6 @@ def numpify(names, df):
     return y
 
 
-def adfuller_tests(yx, names):
-    i = 0
-    for y in yx:
-        result = adfuller(y)
-        print("p-test result for {} : {:.2e}".format(names[i], result[1]))
-        i += 1
-
-
 def main():
     df = pd.read_csv("dataJan-Aug2023.csv", sep=";", decimal=',')
     columns = ['temp before VE', 'flow rate', 'valve feedback', 'return temp', 'temp after VE', 'power', 'flow rate',
@@ -52,15 +44,6 @@ def main():
     y1 = numpify(names1, df.iloc[:, 0:5])
     y2 = numpify(names2, df.iloc[:, 5:9])
 
-    # Augmented dickey fuller test
-    # H0: The time series is non-stationary
-    # H1: The time series is stationary
-    # Significance level = 0.05
-
-    adfuller_tests(y1, names1)
-    adfuller_tests(y2, names2)
-
-    # p << 0.05 for all -> Reject null -> Series are stationary?
 
     # Plots
     plotting(y2, names2)
@@ -75,9 +58,6 @@ def main():
     sns.heatmap(corr, annot=True, fmt=".2f")
     plt.title("Correlations")
     plt.show()
-
-    # Granger-causality tests even though they are considered dumb by The Granger himself for applications outside
-    # eCoNoMeTrIcSsS.... but i think they give a hint i think do i need this idk i think?
 
     
 
